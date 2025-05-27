@@ -10,13 +10,56 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
 <style>
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
 .flight-widget {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    width: 300px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+    padding: 0;
+    width: 350px;
+    max-width: 95vw;
     font-family: "Space Grotesk", sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+.flight-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .flight-widget * {
@@ -25,31 +68,90 @@
     box-sizing: border-box;
 }
 
+.widget-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .flight-widget h2 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.widget-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9em;
+    margin-top: 5px;
+    font-weight: 300;
+}
+
+.flight-calculator {
+    background: white;
+    padding: 25px;
+}
+
+.trip-inputs {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
 }
 
 .input-group {
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.input-group:last-child {
+    margin-bottom: 0;
 }
 
 .input-group label {
     display: block;
-    font-size: 0.9em;
-    margin-bottom: 5px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.input-icon {
+    font-size: 1em;
 }
 
 .input-group input,
 .input-group select {
-    height: 40px;
+    height: 48px;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 0.6em;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.9em;
     font-family: "Space Grotesk", sans-serif;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.input-group input.valid {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .awesomplete {
@@ -61,79 +163,243 @@
     width: 100%;
 }
 
+.awesomplete > ul {
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.awesomplete > ul > li {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.awesomplete > ul > li:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
 #calculateBtn {
     display: block;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 8px 12px;
-    background-color: #007BFF;
+    width: 100%;
+    margin: 25px 0 0 0;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
     font-family: "Space Grotesk", sans-serif;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+#calculateBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+#calculateBtn:hover::before {
+    left: 100%;
 }
 
 #calculateBtn:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4);
+}
+
+#calculateBtn:active {
+    transform: translateY(0);
 }
 
 #calculateBtn:disabled {
-    background-color: #ccc;
+    background: #9ca3af;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#calculateBtn:disabled::before {
+    display: none;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff30;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
 }
 
 #result {
-    margin-top: 20px;
-    font-size: 1.1em;
+    margin-top: 25px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.result-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 2px solid #bbf7d0;
+    border-radius: 15px;
+    padding: 20px;
     text-align: center;
 }
 
-.error {
-    color: #dc3545;
+.co2-amount {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #065f46;
+    margin-bottom: 8px;
+}
+
+.distance-info {
+    color: #6b7280;
     font-size: 0.9em;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.tree-info {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    border: 1px solid #bbf7d0;
+}
+
+.tree-count {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #059669;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.investment-info {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #047857;
+    margin-top: 12px;
+}
+
+.error {
+    color: #dc2626;
+    font-size: 0.9em;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
 }
 
 .loading {
-    color: #007BFF;
+    color: #667eea;
     font-size: 0.9em;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.eco-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #10b981;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.7em;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+@media (max-width: 480px) {
+    .flight-widget {
+        width: 100%;
+        margin: 10px;
+    }
+    
+    .flight-calculator {
+        padding: 20px;
+    }
+    
+    .co2-amount {
+        font-size: 1.8em;
+    }
 }
 </style>
 </head>
 <body>
     <div class="flight-widget">
-        <h2>CO2 Calculator</h2>
+        <div class="widget-header">
+            <h2>🌍 CO2 Calculator</h2>
+            <div class="widget-subtitle">Calculate your flight's carbon footprint</div>
+        </div>
         <div class="flight-calculator">
-            <div class="input-group">
-                <label for="originAirport">Origin Airport:</label>
-                <input type="text" id="originAirport" class="awesomplete" placeholder="Search by code, city, or airport name">
+            <div class="trip-inputs">
+                <div class="input-group">
+                    <label for="originAirport">
+                        <span class="input-icon">✈️</span>
+                        Origin Airport
+                        <span class="eco-badge">FROM</span>
+                    </label>
+                    <input type="text" id="originAirport" class="awesomplete" placeholder="Search by code, city, or airport name">
+                </div>
+        
+                <div class="input-group">
+                    <label for="destinationAirport">
+                        <span class="input-icon">🛬</span>
+                        Destination Airport
+                        <span class="eco-badge">TO</span>
+                    </label>
+                    <input type="text" id="destinationAirport" class="awesomplete" placeholder="Search by code, city, or airport name">
+                </div>
+        
+                <div class="input-group">
+                    <label for="paxClass">
+                        <span class="input-icon">💺</span>
+                        Class
+                    </label>
+                    <select id="paxClass">
+                        <option value="economy">Economy</option>
+                        <option value="business-class">Business Class</option>
+                    </select>
+                </div>
+        
+                <div class="input-group">
+                    <label for="tripType">
+                        <span class="input-icon">🔄</span>
+                        Trip Type
+                    </label>
+                    <select id="tripType">
+                        <option value="one-way">One Way</option>
+                        <option value="round-trip">Round Trip</option>
+                    </select>
+                </div>
             </div>
     
-            <div class="input-group">
-                <label for="destinationAirport">Destination Airport:</label>
-                <input type="text" id="destinationAirport" class="awesomplete" placeholder="Search by code, city, or airport name">
-            </div>
-    
-            <div class="input-group">
-                <label for="paxClass">Class:</label>
-                <select id="paxClass">
-                    <option value="economy">Economy</option>
-                    <option value="business-class">Business Class</option>
-                </select>
-            </div>
-    
-            <div class="input-group">
-                <label for="tripType">Trip Type:</label>
-                <select id="tripType">
-                    <option value="one-way">One Way</option>
-                    <option value="round-trip">Round Trip</option>
-                </select>
-            </div>
-    
-            <button id="calculateBtn">Calculate</button>
+            <button id="calculateBtn">
+                <span id="btnText">Calculate Carbon Footprint</span>
+            </button>
             <div id="result"></div>
         </div>
     </div>
@@ -188,11 +454,15 @@ class FlightCalculator {
 
     buildSearchIndex() {
         this.searchIndex = new Map();
+        this.iataIndex = new Map(); // Dedicated IATA code index for O(1) lookups
         
         this.airports.forEach(airport => {
+            if (!airport.iata) return; // Skip airports without IATA codes
+            
+            // Store in dedicated IATA index for fastest lookup
+            this.iataIndex.set(airport.iata.toUpperCase(), airport);
+            
             const entries = [
-                // Airport IATA code (exact match priority)
-                { text: airport.iata, airport, priority: 1 },
                 // City name
                 { text: airport.city, airport, priority: 2 },
                 // Airport name
@@ -211,48 +481,88 @@ class FlightCalculator {
                 }
             });
         });
-    }
-
-    searchAirports(query) {
-        if (!this.searchIndex || !query) return [];
-        
-        const searchQuery = query.toLowerCase().trim();
-        const results = new Map();
-
-        // Exact matches first
-        if (this.searchIndex.has(searchQuery)) {
-            this.searchIndex.get(searchQuery).forEach(entry => {
-                const key = entry.airport.iata;
-                if (key && (!results.has(key) || results.get(key).priority > entry.priority)) {
-                    results.set(key, entry);
-                }
-            });
         }
 
-        // Partial matches
-        this.searchIndex.forEach((entries, key) => {
-            if (key.includes(searchQuery) && key !== searchQuery) {
-                entries.forEach(entry => {
-                    const airportKey = entry.airport.iata;
-                    if (airportKey && (!results.has(airportKey) || results.get(airportKey).priority > entry.priority)) {
-                        results.set(airportKey, entry);
+        searchAirports(query) {
+        if (!query) return [];
+        
+        const searchQuery = query.toUpperCase().trim();
+        const results = [];
+        let foundExactIataMatch = false;
+
+        // 1. HIGHEST PRIORITY: Exact IATA code match (for all lengths, including 3 characters)
+        if (this.iataIndex.has(searchQuery)) {
+            const airport = this.iataIndex.get(searchQuery);
+            results.push({
+                label: `${airport.iata} - ${airport.name} (${airport.city})`,
+                value: airport.iata
+            });
+            foundExactIataMatch = true;
+        }
+
+        // 2. SECOND PRIORITY: IATA code starts with query (for 1-2 characters OR when no exact match found)
+        if ((searchQuery.length >= 1 && searchQuery.length <= 2) || !foundExactIataMatch) {
+            const iataMatches = [];
+            this.iataIndex.forEach((airport, iataCode) => {
+                if (iataCode.startsWith(searchQuery) && iataCode !== searchQuery) {
+                    iataMatches.push({
+                        label: `${airport.iata} - ${airport.name} (${airport.city})`,
+                        value: airport.iata
+                    });
+                }
+            });
+            
+            // Sort IATA matches alphabetically and add to results
+            iataMatches.sort((a, b) => a.value.localeCompare(b.value));
+            results.push(...iataMatches);
+        }
+
+        // 3. THIRD PRIORITY: Other field matches (only if no exact IATA match OR we need more results)
+        if (!foundExactIataMatch || results.length < 5) {
+            const searchQueryLower = query.toLowerCase().trim();
+            const otherMatches = new Map();
+
+            // Exact matches first
+            if (this.searchIndex.has(searchQueryLower)) {
+                this.searchIndex.get(searchQueryLower).forEach(entry => {
+                    const key = entry.airport.iata;
+                    if (key && !results.some(r => r.value === key)) {
+                        if (!otherMatches.has(key) || otherMatches.get(key).priority > entry.priority) {
+                            otherMatches.set(key, entry);
+                        }
                     }
                 });
             }
-        });
 
-        // Convert to array and sort by priority
-        const sortedResults = Array.from(results.values())
-            .filter(entry => entry.airport.iata) // Only include airports with IATA codes
-            .sort((a, b) => a.priority - b.priority)
-            .slice(0, 20); // Limit results for performance
+            // Partial matches
+            this.searchIndex.forEach((entries, key) => {
+                if (key.includes(searchQueryLower) && key !== searchQueryLower) {
+                    entries.forEach(entry => {
+                        const airportKey = entry.airport.iata;
+                        if (airportKey && !results.some(r => r.value === airportKey)) {
+                            if (!otherMatches.has(airportKey) || otherMatches.get(airportKey).priority > entry.priority) {
+                                otherMatches.set(airportKey, entry);
+                            }
+                        }
+                    });
+                }
+            });
 
-        return sortedResults.map(entry => ({
-            label: `${entry.airport.iata} - ${entry.airport.name} (${entry.airport.city})`,
-            value: entry.airport.iata
-        }));
+            // Convert other matches and add to results
+            const sortedOtherMatches = Array.from(otherMatches.values())
+                .sort((a, b) => a.priority - b.priority)
+                .map(entry => ({
+                    label: `${entry.airport.iata} - ${entry.airport.name} (${entry.airport.city})`,
+                    value: entry.airport.iata
+                }));
+
+            results.push(...sortedOtherMatches);
+        }
+
+        return results.slice(0, 15); // Limit total results
     }
 
+    
     async calculateCO2(distKm, paxClass, tripType) {
         const flightCo2Dict = this.gCO2.gCO2;
 
@@ -360,29 +670,41 @@ document.addEventListener('DOMContentLoaded', async function() {
             list: [],
             minChars: 1,
             maxItems: 15,
-            filter: function() { return true; } // We handle filtering manually
+            filter: function() { return true; }, // We handle filtering manually
+            sort: false, // Disable Awesomplete's sorting to preserve our order
         });
 
         const destAwesome = new Awesomplete(destInput, {
             list: [],
             minChars: 1,
             maxItems: 15,
-            filter: function() { return true; } // We handle filtering manually
+            filter: function() { return true; }, // We handle filtering manually
+            sort: false, // Disable Awesomplete's sorting to preserve our order
         });
 
         // Custom input handlers for fast search
         originInput.addEventListener('input', function() {
             const results = flightCalc.searchAirports(this.value);
-            originAwesome.list = results;
-            if (results.length > 0 && this.value.length > 0) {
+            // Convert results to format where both label and value are the full text
+            const formattedResults = results.map(result => ({
+                label: result.label,
+                value: result.label // Use full label as value so it displays after selection
+            }));
+            originAwesome.list = formattedResults;
+            if (formattedResults.length > 0 && this.value.length > 0) {
                 originAwesome.evaluate();
             }
         });
 
         destInput.addEventListener('input', function() {
             const results = flightCalc.searchAirports(this.value);
-            destAwesome.list = results;
-            if (results.length > 0 && this.value.length > 0) {
+            // Convert results to format where both label and value are the full text
+            const formattedResults = results.map(result => ({
+                label: result.label,
+                value: result.label // Use full label as value so it displays after selection
+            }));
+            destAwesome.list = formattedResults;
+            if (formattedResults.length > 0 && this.value.length > 0) {
                 destAwesome.evaluate();
             }
         });
@@ -390,9 +712,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Clear loading message
         resultDiv.innerHTML = '';
         calculateBtn.disabled = false;
+        document.getElementById('btnText').textContent = 'Calculate Carbon Footprint';
+
+        // Add input validation styling
+        const addValidationStyling = (input) => {
+            input.addEventListener('awesomplete-selectcomplete', function() {
+                this.classList.add('valid');
+            });
+            
+            input.addEventListener('input', function() {
+                if (!this.value.match(/^[A-Z]{3}/)) {
+                    this.classList.remove('valid');
+                }
+            });
+        };
+
+        addValidationStyling(originInput);
+        addValidationStyling(destInput);
 
     } catch (error) {
-        resultDiv.innerHTML = '<div class="error">Failed to load airport data. Please refresh the page.</div>';
+        resultDiv.innerHTML = '<div class="error">❌ Failed to load airport data. Please refresh the page.</div>';
+        document.getElementById('btnText').textContent = 'Calculate Carbon Footprint';
         console.error('Failed to initialize:', error);
         return;
     }
@@ -407,7 +747,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const destMatch = destValue.match(/^([A-Z]{3})/);
 
             if (!originMatch || !destMatch) {
-                resultDiv.innerHTML = '<div class="error">Please select valid airports from the dropdown.</div>';
+                resultDiv.innerHTML = '<div class="error">❌ Please select valid airports from the dropdown.</div>';
                 return;
             }
 
@@ -417,24 +757,43 @@ document.addEventListener('DOMContentLoaded', async function() {
             const tripType = document.getElementById('tripType').value;
 
             // Show calculating state
-            resultDiv.innerHTML = '<div class="loading">Calculating...</div>';
+            resultDiv.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Calculating your impact...</div>';
             calculateBtn.disabled = true;
+            document.getElementById('btnText').innerHTML = '<div class="loading-spinner"></div>Calculating...';
 
             const ret = await flightCalc.calculateCO2FromAirports(originAirportCode, destAirportCode, paxClass, tripType);
             
-            // Display the result
+            // Display the enhanced result
             resultDiv.innerHTML = `
-                CO2 Emission: <strong>${ret.co2.toFixed(3)} tons</strong>
-                <br>Distance: ${ret.dist} km
-                <br><br>Planting <strong style="color: #3FB587;">${ret.treesNeeded}</strong> trees will offset your carbon footprint.
-                <br><br>Invest <strong style="color: #3FB587;">$${(ret.treesNeeded * 1.5).toFixed(2)}</strong> in the well-being of future generations.
+                <div class="result-card">
+                    <div class="co2-amount">
+                        ${ret.co2.toFixed(3)} tons CO₂
+                    </div>
+                    <div class="distance-info">
+                        📏 Flight Distance: ${ret.dist} km
+                    </div>
+                    
+                    <div class="tree-info">
+                        <div class="tree-count">
+                            🌳 ${ret.treesNeeded} trees needed
+                        </div>
+                        <div style="font-size: 0.85em; color: #6b7280;">
+                            to offset your carbon footprint
+                        </div>
+                    </div>
+                    
+                    <div class="investment-info">
+                        💚 Invest $${(ret.treesNeeded * 1.5).toFixed(2)} in our planet's future
+                    </div>
+                </div>
             `;
 
         } catch (error) {
-            resultDiv.innerHTML = '<div class="error">Error calculating CO2 emissions. Please try again.</div>';
+            resultDiv.innerHTML = '<div class="error">⚠️ Error calculating CO2 emissions. Please try again.</div>';
             console.error('Calculation error:', error);
         } finally {
             calculateBtn.disabled = false;
+            document.getElementById('btnText').textContent = 'Calculate Carbon Footprint';
         }
     });
 });
