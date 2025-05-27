@@ -143,8 +143,8 @@ class FlightCalculator {
     static instance;
     airports = null;
     searchIndex = null;
-    // url = 'https://gist.githubusercontent.com/tdreyno/4278655/raw/7b0762c09b519f40397e4c3e100b097d861f5588/airports.json';
-    // url = './airports_filtered.json';
+    url = 'https://gist.githubusercontent.com/DrSocket/658d13b27f5a6afa84ae1c35a4b22727/raw/41c9ee29a61ad5897aabd77dc527a309f7e57bd7/airports.json';
+    
     gCO2 = {
         "comment": "Grams of CO2 / pomkm (passenger kilometer) by transport mode",
         "year": 2019,
@@ -191,8 +191,8 @@ class FlightCalculator {
         
         this.airports.forEach(airport => {
             const entries = [
-                // Airport code (exact match priority)
-                { text: airport.code, airport, priority: 1 },
+                // Airport IATA code (exact match priority)
+                { text: airport.iata, airport, priority: 1 },
                 // City name
                 { text: airport.city, airport, priority: 2 },
                 // Airport name
@@ -202,7 +202,7 @@ class FlightCalculator {
             ];
 
             entries.forEach(entry => {
-                const key = entry.text.toLowerCase().trim();
+                const key = entry.text ? entry.text.toLowerCase().trim() : '';
                 if (key && key.length > 0) {
                     if (!this.searchIndex.has(key)) {
                         this.searchIndex.set(key, []);
@@ -222,8 +222,8 @@ class FlightCalculator {
         // Exact matches first
         if (this.searchIndex.has(searchQuery)) {
             this.searchIndex.get(searchQuery).forEach(entry => {
-                const key = entry.airport.code;
-                if (!results.has(key) || results.get(key).priority > entry.priority) {
+                const key = entry.airport.iata;
+                if (key && (!results.has(key) || results.get(key).priority > entry.priority)) {
                     results.set(key, entry);
                 }
             });
@@ -233,8 +233,8 @@ class FlightCalculator {
         this.searchIndex.forEach((entries, key) => {
             if (key.includes(searchQuery) && key !== searchQuery) {
                 entries.forEach(entry => {
-                    const airportKey = entry.airport.code;
-                    if (!results.has(airportKey) || results.get(airportKey).priority > entry.priority) {
+                    const airportKey = entry.airport.iata;
+                    if (airportKey && (!results.has(airportKey) || results.get(airportKey).priority > entry.priority)) {
                         results.set(airportKey, entry);
                     }
                 });
@@ -243,12 +243,13 @@ class FlightCalculator {
 
         // Convert to array and sort by priority
         const sortedResults = Array.from(results.values())
+            .filter(entry => entry.airport.iata) // Only include airports with IATA codes
             .sort((a, b) => a.priority - b.priority)
             .slice(0, 20); // Limit results for performance
 
         return sortedResults.map(entry => ({
-            label: `${entry.airport.code} - ${entry.airport.name} (${entry.airport.city})`,
-            value: entry.airport.code
+            label: `${entry.airport.iata} - ${entry.airport.name} (${entry.airport.city})`,
+            value: entry.airport.iata
         }));
     }
 
@@ -312,8 +313,8 @@ class FlightCalculator {
     }
 
     async calculateCO2FromAirports(iataOrig, iataDest, paxClass, tripType) {
-        const origAirportObj = this.airports.find(airport => airport.code === iataOrig);
-        const destAirportObj = this.airports.find(airport => airport.code === iataDest);
+        const origAirportObj = this.airports.find(airport => airport.iata === iataOrig);
+        const destAirportObj = this.airports.find(airport => airport.iata === iataDest);
 
         if (!origAirportObj || !destAirportObj) {
             throw new Error('Invalid airport code(s)');
